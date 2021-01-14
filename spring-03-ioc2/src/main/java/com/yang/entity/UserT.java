@@ -1,0 +1,21 @@
+package com.yang.entity;
+
+public class UserT {
+    private String name;
+
+    public UserT(){
+        System.out.println("UserT无参构造方法");
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void show(){
+        System.out.println("name=" + name);
+    }
+}

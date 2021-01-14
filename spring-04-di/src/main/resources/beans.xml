@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="address" class="com.yang.entity.Address">
+        <property name="address" value="天河区"/>
+    </bean>
+
+    <bean id="student" class="com.yang.entity.Student">
+        <!-- 普通值的注入value -->
+        <property name="name" value="ywq"/>
+        <!-- Bean注入ref -->
+        <property name="address" ref="address"/>
+        <!-- 数组值的注入array -->
+        <property name="books">
+            <array>
+                <value>《红楼梦》</value>
+                <value>《西游记》</value>
+                <value>《三国演义》</value>
+                <value>《水浒传》</value>
+            </array>
+        </property>
+        <!--List-->
+        <property name="hobbies">
+            <list>
+                <value>听歌</value>
+                <value>写bug</value>
+                <value>看电影</value>
+            </list>
+        </property>
+        <!-- map -->
+        <property name="card">
+            <map>
+                <entry key="身份证" value="123456789012345678"/>
+                <entry key="校园卡" value="23156523"/>
+            </map>
+        </property>
+        <!--set-->
+        <property name="games">
+            <set>
+                <value>CF</value>
+                <value>LOL</value>
+            </set>
+        </property>
+        <!-- null值注入-->
+        <property name="wife">
+            <null/>
+        </property>
+        <!-- Properties -->
+        <property name="info">
+            <props>
+                <prop key="学号">20210112</prop>
+                <prop key="性别">男</prop>
+            </props>
+        </property>
+    </bean>
+</beans>

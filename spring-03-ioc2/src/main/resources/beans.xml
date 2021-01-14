@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <!-- 有参构造 -->
+    <bean id="user" class="com.yang.entity.User">
+        <!-- 第一种方式: 参数下标方式 -->
+<!--        <constructor-arg index="0" value="ywq"/>-->
+        <!-- 第二种方式: 不建议使用，用类型判断会存在无法识别的问题 -->
+<!--        <constructor-arg type="java.lang.String" value="ywq"/>-->
+        <!-- 第三种方式: 直接通过参数名称或者引用类型 -->
+        <constructor-arg name="name" value="ywq"/>
+    </bean>
+
+    <!-- 取别名 -->
+    <alias name="user" alias="userAlias"/>
+
+    <!-- 不管是否被get，只要加载的时候就会被创建 -->
+    <bean id="userT" class="com.yang.entity.UserT">
+
+    </bean>
+</beans>
