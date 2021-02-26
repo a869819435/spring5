@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        https://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- 注册bean -->
+    <bean id="userService" class="com.yang.service.impl.UserServiceImpl"/>
+    <bean id="beforeLog" class="com.yang.log.BeforeLog"/>
+    <bean id="afterLog" class="com.yang.log.AfterLog"/>
+
+    <!--方式一: 使用原生的Spring API接口-->
+    <!--配置AOP: 需要导入aop的约束-->
+<!--    <aop:config>-->
+<!--        &lt;!&ndash;切入点-->
+<!--         expression="execution([需要执行的位置] [修饰符] [返回值] [列名] [方法名] [参数])"-->
+<!--         execution(<修饰符模式>? <返回类型模式> <方法名模式>(<参数模式>) <异常模式>?)-->
+<!--         除了返回类型模式、方法名模式和参数模式外，其它项都是可选的,也就是带?的可以省略-->
+<!--         这里的这个意思是可以是任意修饰符的这个包下的这个类的任意方法名，参数也是任意的&ndash;&gt;-->
+<!--        <aop:pointcut id="pointcut" expression="execution(* com.yang.service.UserService.*(..))"/>-->
+
+<!--        &lt;!&ndash;执行环绕增加-->
+<!--        advice-ref: 增强的执行的方法，也就是额外执行的方法-->
+<!--        pointcut-ref: 需要增加的切点，也就是那些类的方法执行需要增强-->
+<!--        &ndash;&gt;-->
+<!--        <aop:advisor advice-ref="afterLog" pointcut-ref="pointcut"/>-->
+<!--        <aop:advisor advice-ref="beforeLog" pointcut-ref="pointcut"/>-->
+
+<!--    </aop:config>-->
+
+    <!-- 方式二：自定义类 -->
+<!--    <bean id="diy" class="com.yang.diy.DiyPointCut"/>-->
+
+<!--    <aop:config>-->
+<!--        &lt;!&ndash; 自定义切面，ref要引用的类的位置&ndash;&gt;-->
+<!--        <aop:aspect ref="diy">-->
+<!--            &lt;!&ndash; 切入点 &ndash;&gt;-->
+<!--            <aop:pointcut id="point" expression="execution(* com.yang.service.UserService.*(..))"/>-->
+<!--            &lt;!&ndash; 通知(什么时候来执行) &ndash;&gt;-->
+<!--            <aop:before method="before" pointcut-ref="point"/>-->
+<!--            <aop:after method="after" pointcut-ref="point"/>-->
+<!--        </aop:aspect>-->
+<!--    </aop:config>-->
+
+    <!-- 方式三：使用注解实现AOP -->
+    <bean id="annotationPointCut" class="com.yang.diy.AnnotationPointCut"/>
+    <!-- 开启注解支持
+    proxy-target-class="false" 表示基于接口的AOP，使用JDK实现，默认为这个
+    proxy-target-class="true" 表示基于类，使用cglib实现，默认为这个
+     -->
+    <aop:aspectj-autoproxy proxy-target-class="false"/>
+
+</beans>
