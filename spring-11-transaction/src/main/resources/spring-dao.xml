@@ -2,10 +2,13 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         https://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/aop
-        https://www.springframework.org/schema/aop/spring-aop.xsd">
+        https://www.springframework.org/schema/aop/spring-aop.xsd
+        http://www.springframework.org/schema/tx
+        https://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <!--  DataSource数据源：使用spring的数据源替代Mybatis的配置
     (除了使用Spring之外还有c3p0、dbcp、druid)
@@ -28,12 +31,40 @@
         <property name="mapperLocations" value="classpath:mapper/*.xml"/>
     </bean>
 
-    <!--注入sqlSession到ioc中，采用自带的sqlSessionTemplate模板类创建
+    <!--注入sqlSession到spring中，采用自带的sqlSessionTemplate模板类创建
     sqlSession：Java的mapper去获取到数据库的结果数据的缓存类
     方式2中这钟方式是不需要的-->
     <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
         <!--源码中表示只能使用构造器注入，源码中没有set-->
         <constructor-arg index="0" ref="sqlSessionFactory"/>
     </bean>
+
+    <!--配置声名式事务-->
+    <bean id="transactionManger" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!--结合AOP实现事务的植入-->
+    <!-- 1.配置事务通知 -->
+    <tx:advice id="txAdvice" transaction-manager="transactionManger">
+        <!--指定那些方法需要植入[扫描方法开头含有这些]-->
+        <!--配置事务的传播性 propagation 默认为Required(如果当前没有事务就创建事务,有就用),一共有七种,自己去查-->
+        <tx:attributes>
+            <tx:method name="add*" propagation="REQUIRED"/>
+            <tx:method name="delete*" propagation="REQUIRED"/>
+            <tx:method name="update*" propagation="REQUIRED"/>
+            <!-- read-only:只读模式,不进行任何干预 -->
+            <tx:method name="query*" read-only="true"/>
+            <tx:method name="*" propagation="REQUIRED"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!-- 2.配置事务切入 -->
+    <aop:config>
+        <!-- 切入点(多路径用|| 分隔) -->
+        <aop:pointcut id="txPointCut" expression="execution(* com.yang.dao.*.*(..))"/>
+        <!-- 切入通知 -->
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="txPointCut"/>
+    </aop:config>
 
 </beans>

@@ -8,13 +8,8 @@
     <import resource="spring-dao.xml"/>
 
     <!--注入UserMapperImpl-->
-    <bean id="userMapper" class="com.yang.mapper.UserMapperImpl">
-        <property name="sqlSession" ref="sqlSession"/>
-    </bean>
-
-    <!--注入UserMapperImpl2-->
-    <bean id="userMapper2" class="com.yang.mapper.UserMapperImpl2">
-        <!--继承父类的sqlSessionFactory-->
+    <bean id="userMapper" class="com.yang.dao.UserMapperImpl">
         <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
     </bean>
+
 </beans>
