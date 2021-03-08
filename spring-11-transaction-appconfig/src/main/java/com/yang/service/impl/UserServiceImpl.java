@@ -32,6 +32,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(rollbackFor = Exception.class)
+    /**
+     * @Transactional
+     *   *     开启注解事务配置，一个 @Transactional只能对当前类有效,当前类下面所有方法配置一样
+     *   *  isolation=Isolation.REPEATABLE_READ, 隔离级别
+     *      propagation=Propagation.REQUIRED, 传播行为（规则）
+     *      timeout=5, 超时时间
+     *      readOnly=true  是否是只读事务
+     */
     public void testPointCut(){
         List<User> userList = userMapper.queryUser();
         userList.forEach(System.out::println);
